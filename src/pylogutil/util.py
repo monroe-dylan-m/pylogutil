@@ -48,7 +48,7 @@ class LineRegexFilter(LineRegexFilterBase):
         return self._replacer(matchstr)
 
 
-class CompositeLineRegexFilter(LineRegexFilterBase, object):
+class CompositeLineRegexFilter(LineRegexFilterBase):
     __slots__ = ('_subfilters')
     _subfilters: Dict[str, LineRegexFilter]
 
