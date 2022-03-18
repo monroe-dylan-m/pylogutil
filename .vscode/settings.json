@@ -1,4 +1,5 @@
 {
     "esbonio.server.enabled": true,
     "restructuredtext.confPath": "",
+    "esbonio.sphinx.confDir": "/home/ninj/pylogutil",
 }
