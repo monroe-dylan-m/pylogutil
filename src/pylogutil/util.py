@@ -89,7 +89,7 @@ def filtermap(func: Callable[[_U], _T | None], iterable: Iterable[_U]) -> Iterab
     r'(?=[^0-9]|$)'
 )
 def timestamp_filter(line: str) -> str:
-    return click.style(line, italic=True)
+    return click.style(line, bold=True, fg='bright_white')
 
 
 class Rgb:
