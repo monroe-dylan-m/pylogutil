@@ -1,4 +1,11 @@
-"""Implements a console interface for interacting with logs."""
+"""Implements a console interface for interacting with logs.
+
+.. data:: clilogfilter
+    :type: click.Command
+
+    .. automethod:: clilogfilter.callback
+
+"""
 
 from ._linefiltering._regexfilterbase import (LineRegexFilter,
                                               CompositeLineRegexFilter)
@@ -16,8 +23,10 @@ __all__ = ['clilogfilter', 'main']
     context_settings={'help_option_names': ['-h', '--help']},
     options_metavar="[OPTIONS...]",
     no_args_is_help=True,
-    help="Prints the lines of FILE (or stdin if no file is specified) " +
-    "after applying the filters specified by OPTIONS.")
+    help="Prints the lines of a log file that match the criterion specified " +
+    "by OPTIONS.",
+    epilog="If FILE is omitted, standard input is used instead."
+)
 @click.option('-f', '--first', type=click.IntRange(min=0, min_open=True),
               metavar="NUM", help="Print the first NUM lines.")
 @click.option('-l', '--last', type=click.IntRange(min=0, min_open=True),
@@ -38,9 +47,27 @@ def clilogfilter(
         timestamps: bool,
         ipv4: bool,
         ipv6: bool,
-        file: TextIO
-) -> None:
+        file: TextIO) -> None:
+    """Callback function for `clilogfilter` which receives the cli options 
+    after `click` has processed them.
 
+    Filters the input received from `file` according to the other parameters 
+    and sends the resulting lines to stdout.
+
+    Args:
+        first: If not `None`, the number of lines from the start of the input 
+            to include in the output.
+        last: If not `None`, the number of lines from the end of the input to
+            include in the output.
+        timestamps: Whether to only include lines from the input containing a 
+            timestamp in the output.
+        ipv4: Whether to only include lines from the input containing an 
+            IPv4 address in the output.
+        ipv6: Whether to only include lines from the input containing an 
+            IPv6 address the output.
+        file: A file-like object opened for reading text (mode 'r') to be 
+            used as input.
+    """
     line_iter: Iterable[str] = file
 
     # create wrappers around `line_iter` to filter to the `first` and `last`
@@ -82,7 +109,7 @@ def clilogfilter(
 
 
 def main() -> None:
-    """Executes the `click` cli command `clifilter`."""
+    """Invokes `clilogfilter`."""
     clilogfilter()
 
 
