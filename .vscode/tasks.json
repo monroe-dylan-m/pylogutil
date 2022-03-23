@@ -1,0 +1,52 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "group": "build",
+            "label": "Build html docs (Sphinx)",
+            "detail": "Build html documentation using Sphinx",
+            "type": "process",
+            "command": "sphinx-build",
+            "args": ["-b", "html", "./source", "./build"],
+            "options": {
+                "cwd": "${workspaceFolder}/docs"
+            },
+            "presentation": {
+                "showReuseMessage": false
+            }
+        },
+        {
+            "group": "build",
+            "label": "Rebuild document sources (apidoc)",
+            "detail": "Rebuild document sources using sphinx-apidoc",
+            "type": "process",
+            "command": "sphinx-apidoc",
+            "args": ["--private", "--separate", "--force",
+                "-o", "./docs/source", "./src/"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "showReuseMessage": false
+            }
+        },
+        {
+            "group": "build",
+            "label": "Rebuild html docs (Sphinx + apidoc)",
+            "detail":
+                "Rebuild html documentation using Sphinx and sphinx-apidoc",
+            "dependsOn": "Rebuild document sources (apidoc)",
+            "type": "process",
+            "command": "sphinx-build",
+            "args": ["-a", "-E", "-b", "html", "./source", "./build"],
+            "options": {
+                "cwd": "${workspaceFolder}/docs"
+            },
+            "presentation": {
+                "showReuseMessage": false
+            }
+        }
+    ]
+}
