@@ -1,4 +1,3 @@
-=========
 pylogutil
 =========
 
@@ -14,17 +13,17 @@ Installation
     python -m venv .venv
 
 4. Run ``pip install .``
-5. Run the cli application using ``util.py [Options] [Arguments]``
+5. Run the cli application using ``util.py`` (see `Usage`_, below).
 
 Usage
 ------
 
 ::
 
-    Usage: python -m pylogutil [OPTIONS...] [FILE]
+    Usage: util.py [OPTIONS...] [FILE]
 
-    Prints the lines of FILE (or stdin if no file is specified) after applying
-    the filters specified by OPTIONS.
+    Prints the lines of a log file that match the criterion specified by
+    OPTIONS.
 
     Options:
     -f, --first NUM   Print the first NUM lines.  [x>0]
@@ -36,3 +35,5 @@ Usage
                         highlighted.
     --version         Show the version and exit.
     -h, --help        Show this message and exit.
+
+    If FILE is omitted, standard input is used instead.
