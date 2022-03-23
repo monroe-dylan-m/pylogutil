@@ -25,6 +25,4 @@ Module contents
 
 .. automodule:: pylogutil
    :members:
-   :undoc-members:
-   :show-inheritance:
    :private-members:

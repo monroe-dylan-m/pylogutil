@@ -15,6 +15,4 @@ Module contents
 
 .. automodule:: pylogutil._linefiltering
    :members:
-   :undoc-members:
-   :show-inheritance:
    :private-members:

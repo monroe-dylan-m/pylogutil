@@ -44,7 +44,6 @@ autodoc_default_options = {
     'members': True,
     'private-members': True,
     'special-members': True,
-    'inherited-members': True,
     'ignore-module-all': True,
     'show-inheritance': True
 }
@@ -52,8 +51,6 @@ autodoc_default_options = {
 # -- Napoleon settings --------
 napoleon_google_docstring = True
 napoleon_numpy_docstring = True
-#napoleon_include_init_with_doc = False
-#napoleon_include_private_with_doc = False
 napoleon_include_init_with_doc = True
 napoleon_include_private_with_doc = True
 napoleon_include_special_with_doc = True
@@ -64,8 +61,7 @@ napoleon_use_ivar = False
 napoleon_use_param = True
 napoleon_use_keyword = True
 napoleon_use_rtype = True
-#napoleon_preprocess_types = False
-napoleon_preprocess_types = True
+napoleon_preprocess_types = False
 napoleon_type_aliases = None
 napoleon_attr_annotations = True
 napoleon_custom_sections = None

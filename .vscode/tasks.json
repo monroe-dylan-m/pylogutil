@@ -26,7 +26,10 @@
             "args": ["--private", "--separate", "--force",
                 "-o", "./docs/source", "./src/"],
             "options": {
-                "cwd": "${workspaceFolder}"
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "SPHINX_APIDOC_OPTIONS": "members"
+                }
             },
             "presentation": {
                 "showReuseMessage": false
