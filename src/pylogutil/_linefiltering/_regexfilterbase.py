@@ -18,10 +18,8 @@ class LineRegexFilterBase(ABC):
     """A regular expression which determines what part of a line is matched."""
 
     _cpattern: re.Pattern | None
-    """Stores a compiled `re.Pattern` representing `_pattern`.
-
-    This is generated the first time `_pattern` is accessed.
-    """
+    """A compiled `re.Pattern` representing `_pattern`, or `None` if 
+    `_pattern` has not yet been used."""
 
     def __call__(self: Self, line: str) -> str | None:
         """Attempts to match `_pattern` in line and passes any matches 
@@ -39,11 +37,12 @@ class LineRegexFilterBase(ABC):
 
         new_line: str
         rcount: int
-        new_line, rcount = self._cpattern.subn(
-            self._match_replace_callback, line)
+        new_line, rcount = self._cpattern.subn(self._match_replace_callback,
+                                               line)
 
         if rcount <= 0:
             return None
+
         return new_line
 
     @abstractmethod
@@ -70,7 +69,9 @@ class LineRegexFilter(LineRegexFilterBase):
     """A function that should convert a string into its replacement."""
 
     def __init__(self: Self,
-                 replacer: Callable[[str], str], pattern: str) -> None:
+                 replacer: Callable[[str], str],
+                 pattern: str
+                 ) -> None:
         """
         Args:
             replacer: A function that should convert a string into its
@@ -85,6 +86,7 @@ class LineRegexFilter(LineRegexFilterBase):
     def _match_replace_callback(self: Self, match: re.Match) -> str:
         """Invokes `_replacer` to convert the matched text to replacement
         text"""
+
         matchstr: str = match.group(0)
         return self._replacer(matchstr)
 
@@ -103,6 +105,7 @@ def lineregexfilter(pattern: str
         def replacer(line: str) -> str:
             return line.upper() # convert 'cpu' to 'CPU'
     """
+
     def _lineregexfilter(replacer: Callable[[str], str]) -> LineRegexFilter:
         return LineRegexFilter(replacer, pattern)
 
@@ -132,6 +135,7 @@ class CompositeLineRegexFilter(LineRegexFilterBase):
         The regex groups are given unique ids so that the sub-filter whose 
         pattern matched can be determined from the `re.Match` object.
         """
+
         self._subfilters = {}
         subpatterns: list[str] = []
 
@@ -147,7 +151,10 @@ class CompositeLineRegexFilter(LineRegexFilterBase):
         """Checks the group id of the pattern that was matched and delegates 
         to the appropriate `_subfilter`.`LineRegexFilter._replacer` to perform 
         the replacement of the matched text."""
+
         if match.lastgroup is None or match.lastgroup not in self._subfilters:
             return match.string
+
         matchstr: str = match.group(0)
+
         return self._subfilters[match.lastgroup]._replacer(matchstr)

@@ -36,9 +36,8 @@ def ipv4_filter(line: str) -> str:
     The color that is applied is a function of the address, such that matching 
     addresses will have matching colors."""
 
-    ip_segments: Sequence[int] = [
-        int(part) for part in line.split('.')
-    ]
+    ip_segments: Sequence[int] = [int(part)
+                                  for part in line.split('.')]
 
     return click.style(line, underline=True,
                        fg=RgbConverter.from_int_list_8bit(ip_segments))

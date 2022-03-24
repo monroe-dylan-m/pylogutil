@@ -9,10 +9,9 @@ _U = TypeVar('_U')
 _P = ParamSpec('_P')
 
 
-def filtermap(
-        func: Callable[[_U], _T | None],
-        iterable: Iterable[_U]
-) -> Iterable[_T]:
+def filtermap(func: Callable[[_U], _T | None],
+              iterable: Iterable[_U]
+              ) -> Iterable[_T]:
     """Acts like a combination of `filter` and `map` in that the supplied 
     `func` is able to both replace items in `iterable` and also exclude them 
     from the generated items.
@@ -32,11 +31,10 @@ def filtermap(
             yield res
 
 
-def indirect_filter(
-        iter_factory: Callable[_P, Iterable[_T]],
-        *args: _P.args,
-        **kwargs: _P.kwargs
-) -> Iterable[_T]:
+def indirect_filter(iter_factory: Callable[_P, Iterable[_T]],
+                    *args: _P.args,
+                    **kwargs: _P.kwargs
+                    ) -> Iterable[_T]:
     """Produces an iterable from a supplied factory function and then iterates 
     over it. The factory is not called until iteration begins.
 

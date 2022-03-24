@@ -1,7 +1,7 @@
 """Contains tests for the `pylogutil.util` cli application."""
 
 from dataclasses import dataclass
-from typing import List, Optional, Sequence
+from typing import Optional, Sequence
 from typing_extensions import Self
 from click.testing import CliRunner, Result
 from pylogutil.util import clilogfilter
@@ -11,6 +11,7 @@ import pytest
 @dataclass
 class CliArgs:
     """Stores arguments for the `pylogutil.util` cli application."""
+
     help: bool = False
     version: bool = False
     first: Optional[int] = None
@@ -23,7 +24,8 @@ class CliArgs:
     def to_arg_list(self: Self) -> Sequence[str]:
         """Converts all argument values into a list of strings which can 
         be used to invoke `clilogfilter` with the same arguments."""
-        args: List[str] = []
+
+        args: list[str] = []
 
         if self.help:
             args.append('--help')
@@ -48,6 +50,7 @@ class CliArgs:
 @dataclass
 class Expect:
     """Represents the expected outcome of a cli application"""
+
     exit_code: Optional[int] = 0
     stdout: Optional[str] = None
     stderr: Optional[str] = None
@@ -64,7 +67,9 @@ def line_number_log(nlines: int, start: int = 1) -> str:
     Returns:
         A string where each line is followed by a newline character (``\\n``).
     """
-    return '\n'.join([f'Line {str(i)}' for i in range(start, start+nlines)]) + '\n'
+
+    return ''.join(f'Line {str(i)}\n'
+                   for i in range(start, start + nlines))
 
 
 @pytest.fixture(scope="module")
@@ -75,6 +80,7 @@ def runner():
 class Invoker():
     """Invokes the `pylogutil.util` cli application using the supplied
     arguments."""
+
     _runner: CliRunner
 
     def __init__(self: Self, runner: CliRunner) -> None:
@@ -98,6 +104,7 @@ class Invoker():
         Returns:
             The cli application result.
         """
+
         result: Result = self._runner.invoke(
             clilogfilter, args.to_arg_list(), stdin, color=color)
 
@@ -143,13 +150,11 @@ def invoker(runner: CliRunner) -> Invoker:
                      id='7_first-negative'),
     ]
 )
-def test_first(
-        invoker: Invoker,
-        first: int,
-        stdin: Optional[str],
-        expected_value: str | int
-) -> None:
-
+def test_first(invoker: Invoker,
+               first: int,
+               stdin: Optional[str],
+               expected_value: str | int
+               ) -> None:
     invoker(
         CliArgs(first=first),
         stdin,
@@ -183,13 +188,11 @@ def test_first(
                      id='7_last-negative'),
     ]
 )
-def test_last(
-        invoker: Invoker,
-        last: int,
-        stdin: Optional[str],
-        expected_value: str | int
-) -> None:
-
+def test_last(invoker: Invoker,
+              last: int,
+              stdin: Optional[str],
+              expected_value: str | int
+              ) -> None:
     invoker(
         CliArgs(last=last),
         stdin,

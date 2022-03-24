@@ -19,35 +19,44 @@ import itertools
 __all__ = ['clilogfilter', 'main']
 
 
-@click.command(
-    context_settings={'help_option_names': ['-h', '--help']},
-    options_metavar="[OPTIONS...]",
-    no_args_is_help=True,
-    help="Prints the lines of a log file that match the criterion specified " +
-    "by OPTIONS.",
-    epilog="If FILE is omitted, standard input is used instead."
-)
-@click.option('-f', '--first', type=click.IntRange(min=0, min_open=True),
-              metavar="NUM", help="Print the first NUM lines.")
-@click.option('-l', '--last', type=click.IntRange(min=0, min_open=True),
-              metavar="NUM", help="Print the last NUM lines.")
-@click.option('-t', '--timestamps', is_flag=True,
+@click.command(context_settings={'help_option_names': ['-h', '--help']},
+               options_metavar="[OPTIONS...]",
+               no_args_is_help=True,
+               help="Prints the lines of a log file that match the " +
+                    "criterion specified by OPTIONS.",
+               epilog="If FILE is omitted, standard input is used instead.")
+@click.option('-f', '--first',
+              type=click.IntRange(min=0, min_open=True),
+              metavar="NUM",
+              help="Print the first NUM lines.")
+@click.option('-l', '--last',
+              type=click.IntRange(min=0, min_open=True),
+              metavar="NUM",
+              help="Print the last NUM lines.")
+@click.option('-t', '--timestamps',
+              is_flag=True,
               help="Print lines that contain a timestamp in HH:MM:SS format.")
-@click.option('-i', '--ipv4', is_flag=True,
+@click.option('-i', '--ipv4',
+              is_flag=True,
               help="Print lines that contain an IPv4 address, " +
               "matching IPs are highlighted.")
-@click.option('-I', '--ipv6', is_flag=True,
+@click.option('-I', '--ipv6',
+              is_flag=True,
               help="Print lines that contain an IPv6 address," +
               "matching IPs are highlighted.")
-@click.version_option(prog_name='util.py', package_name='pylogutil')
-@click.argument('file', type=click.File('r'), metavar="[FILE]", default='-')
-def clilogfilter(
-        first: Optional[int],
-        last: Optional[int],
-        timestamps: bool,
-        ipv4: bool,
-        ipv6: bool,
-        file: TextIO) -> None:
+@click.version_option(prog_name='util.py',
+                      package_name='pylogutil')
+@click.argument('file',
+                type=click.File('r'),
+                metavar="[FILE]",
+                default='-')
+def clilogfilter(first: Optional[int],
+                 last: Optional[int],
+                 timestamps: bool,
+                 ipv4: bool,
+                 ipv6: bool,
+                 file: TextIO
+                 ) -> None:
     """Callback function for `clilogfilter` which receives the cli options 
     after `click` has processed them.
 
@@ -76,7 +85,7 @@ def clilogfilter(
 
     if first is not None:
         firstlast_filters.append(
-            line for index, line in zip(range(first), line_iter))
+            line for _, line in zip(range(first), line_iter))
 
     if last is not None:
         firstlast_filters.append(
