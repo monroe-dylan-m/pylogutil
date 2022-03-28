@@ -25,6 +25,7 @@ def filtermap(func: Callable[[_U], _T | None],
     Returns:
         An `Iterable` which returns the processed items which were not 
         excluded."""
+
     for it in iterable:
         res: _T | None = func(it)
         if res is not None:
@@ -65,4 +66,5 @@ def indirect_filter(iter_factory: Callable[_P, Iterable[_T]],
             I am string 19!
             I am string 20!
     """
+
     yield from iter_factory(*args, **kwargs)

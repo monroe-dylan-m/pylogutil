@@ -11,8 +11,10 @@ __all__ = ['timestamp_filter', 'ipv4_filter', 'ipv6_filter']
 
 @lineregexfilter(
     r'(?:(?<=[^0-9])|^)' +
+
     # 99:99:99
     r'(?:[0-9]{2}:){2}[0-9]{2}' +
+
     r'(?=[^0-9]|$)'
 )
 def timestamp_filter(line: str) -> str:
@@ -23,10 +25,13 @@ def timestamp_filter(line: str) -> str:
 
 @lineregexfilter(
     r'(?:(?<=[^0-9])|^)' +
+
     # 250-255|200-249|100-199|10-99|0-9. (x3)
     r'(?:(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])\.){3}' +
+
     # 250-255|200-249|100-199|10-99|0-9
     r'(?:25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]|[0-9])' +
+
     r'(?=[^0-9]|$)'
 )
 def ipv4_filter(line: str) -> str:
@@ -39,7 +44,8 @@ def ipv4_filter(line: str) -> str:
     ip_segments: Sequence[int] = [int(part)
                                   for part in line.split('.')]
 
-    return click.style(line, underline=True,
+    return click.style(line,
+                       underline=True,
                        fg=RgbConverter.from_int_list_8bit(ip_segments))
 
 
@@ -114,5 +120,6 @@ def ipv6_filter(line: str) -> str:
             (int(segment, 16) if segment else 0)
             for segment in ip_sections[1])
 
-    return click.style(line, underline=True,
+    return click.style(line,
+                       underline=True,
                        fg=RgbConverter.from_int_list_8bit(ip_segments))
