@@ -56,7 +56,7 @@ class Expect:
     stderr: Optional[str] = None
 
 
-def line_number_log(nlines: int, start: int = 1) -> str:
+def line_number_log(nlines: int, start: int = 0) -> str:
     """Generates a log file string with `nlines` lines in the format: 
     ``Line 1``, ``Line 2``, ...
 
@@ -69,7 +69,7 @@ def line_number_log(nlines: int, start: int = 1) -> str:
     """
 
     return ''.join(f'Line {str(i)}\n'
-                   for i in range(start, start + nlines))
+                   for i in range(1 + start, 1 + start + nlines))
 
 
 @pytest.fixture(scope="module")
@@ -169,7 +169,7 @@ def test_first(invoker: Invoker,
         pytest.param(7, line_number_log(7), line_number_log(7),
                      id='1_last-equals-length'),
 
-        pytest.param(7, line_number_log(10), line_number_log(7, 1+(10-7)),
+        pytest.param(7, line_number_log(10), line_number_log(7, 10-7),
                      id='2_last-lessthan-length'),
 
         pytest.param(7, line_number_log(6), line_number_log(6),
@@ -195,6 +195,34 @@ def test_last(invoker: Invoker,
               ) -> None:
     invoker(
         CliArgs(last=last),
+        stdin,
+        Expect(**{
+            ('exit_code' if isinstance(expected_value, int) else 'stdout'):
+                expected_value}))
+
+
+@pytest.mark.parametrize(
+    ('first', 'last', 'stdin', 'expected_value'),
+    [
+        pytest.param(2, 4, line_number_log(7),
+                     (line_number_log(2) + line_number_log(4, 3)),
+                     id='1_first-plus-last-lessthan-length'),
+        pytest.param(3, 4, line_number_log(7),
+                     line_number_log(7),
+                     id='2_first-plus-last-equalto-length'),
+        pytest.param(4, 4, line_number_log(7),
+                     line_number_log(7),
+                     id='3_first-plus-last-lessthan-length'),
+    ]
+)
+def test_firstlast(invoker: Invoker,
+                   first: int,
+                   last: int,
+                   stdin: Optional[str],
+                   expected_value: str | int
+                   ) -> None:
+    invoker(
+        CliArgs(first=first, last=last),
         stdin,
         Expect(**{
             ('exit_code' if isinstance(expected_value, int) else 'stdout'):
